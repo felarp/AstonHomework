@@ -17,6 +17,7 @@ class FactorialTest {
 
     @Test
     void testFactorialOfNegativeNumberThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> Factorial.calculate(-1), "Ожидалось исключение для -1");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> Factorial.calculate(-1));
+        System.out.println("Тест успешно поймал исключение: " + exception.getMessage());
     }
 }
