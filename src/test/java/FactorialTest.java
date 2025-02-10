@@ -1,23 +1,33 @@
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FactorialTest {
 
-    @Test
-    void testFactorialOfZero() {
-        assertEquals(1, Factorial.calculate(0), "Факториал 0 должен быть 1");
+    @ParameterizedTest
+    @MethodSource("factorialDataProvider")
+    void testFactorial(int number, long expectedResult) {
+        assertEquals(expectedResult, Factorial.calculate(number),
+                "Факториал " + number + " должен быть " + expectedResult);
     }
 
-    @Test
-    void testFactorialOfPositiveNumber() {
-        assertEquals(120, Factorial.calculate(5), "Факториал 5 должен быть 120");
+    private static Stream<Arguments> factorialDataProvider() {
+        return Stream.of(
+                Arguments.of(0, 1),
+                Arguments.of(1, 1),
+                Arguments.of(5, 120)
+        );
     }
-
     @Test
-    void testFactorialOfNegativeNumberThrowsException() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> Factorial.calculate(-1));
-        System.out.println("Тест успешно поймал исключение: " + exception.getMessage());
+    void testFactorialThrowsExceptionForNegativeNumber() {
+        assertThrows(IllegalArgumentException.class,
+                () -> Factorial.calculate(-1),
+                "Ожидалось исключение IllegalArgumentException для отрицательного числа");
     }
 }
