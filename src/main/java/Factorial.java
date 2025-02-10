@@ -1,9 +1,9 @@
 public class Factorial {
     public static long calculate(int number) {
-            if (number < 0) throw new IllegalArgumentException("Число должно быть неотрицательным");
-            long result = 1;
-            for (int i = 2; i <= number; i++) result *= i;
-            return result;
+        if (number < 0) {
+            throw new IllegalArgumentException("Число должно быть неотрицательным");
         }
+        return (number == 0 || number == 1) ? 1 : number * calculate(number - 1);
     }
+}
 

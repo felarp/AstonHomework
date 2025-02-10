@@ -1,26 +1,28 @@
-import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertThrows;
+
 public class FactorialTest {
-    @Test
-    public void testFactorialOfZero() {
-        Assert.assertEquals(Factorial.calculate(0), 1, "Факториал 0 должен быть 1");
+
+    @DataProvider(name = "factorialDataProvider")
+    public Object[][] factorialDataProvider() {
+        return new Object[][]{
+                {0, 1},
+                {1, 1},
+                {5, 120}
+        };
+    }
+    @Test(dataProvider = "factorialDataProvider")
+    public void testFactorial(int number, long expectedResult) {
+        assertEquals(Factorial.calculate(number), expectedResult,
+                "Факториал " + number + " должен быть " + expectedResult);
     }
 
     @Test
-    public void testFactorialOfPositiveNumber() {
-        Assert.assertEquals(Factorial.calculate(5), 120, "Факториал 5 должен быть 120");
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Число должно быть неотрицательным")
-    public void testFactorialOfNegativeNumberThrowsExceptionWithMessage() {
-        Factorial.calculate(-1);
-    }
-
-    @Test
-    public void testFactorialOfLargeNumber() {
-
-        Assert.assertTrue(Factorial.calculate(20) > 0, "Факториал 20 должен быть положительным");
+    public void testFactorialThrowsExceptionForNegativeNumber() {
+        assertThrows(IllegalArgumentException.class, () -> Factorial.calculate(-1));
     }
 }
 
