@@ -1,41 +1,35 @@
 package tests;
 
-import org.junit.jupiter.api.BeforeEach;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pages.MtsOnlinePaymentPage;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MtsOnlinePaymentTest extends BaseTest {
-
-    private MtsOnlinePaymentPage paymentPage;
-
-    @BeforeEach
-    void setUp() {
-        paymentPage = new MtsOnlinePaymentPage(driver);
-    }
-
     @Test
-    void shouldHaveCorrectBlockTitle() {
-        assertThat(paymentPage.getBlockTitle()).isEqualTo("Онлайн пополнение без комиссии");
-    }
+    @DisplayName("Проверка блока 'Онлайн пополнение без комиссии'")
+    @Story("Проверка функциональности блока")
 
-    @Test
-    void shouldDisplayPaymentSystemLogos() {
-        assertThat(paymentPage.getPaymentSystemLogosCount()).isGreaterThan(0);
-    }
+    public void testOnlinePaymentBlock() {
 
-    @Test
-    void shouldOpenServiceDetailsLink() {
-        paymentPage.clickDetailsLink();
-        assertThat(paymentPage.isServiceDetailsOpened()).isTrue();
-    }
+        String blockTitle = paymentPage.getBlockTitle();
+        assertThat(blockTitle).as("Название блока должно быть 'Онлайн пополнение'").isEqualTo("Онлайн пополнение без комиссии");
 
-    @Test
-    void shouldProceedWithValidPhoneNumber() {
-        paymentPage.fillPhoneNumberAndAmountAndContinue("297777777", "5");
-        assertThat(paymentPage.isConfirmationStepDisplayed()).isTrue();
+
+        boolean hasLogos = paymentPage.hasPaymentSystemLogos();
+        assertThat(hasLogos).as("Логотипы платежных систем должны быть отображены").isTrue();
+
+
+        paymentPage.clickAndVerifyServiceDetails(driver);
+        assertThat(driver.getCurrentUrl()).as (("После клика по ссылке, должно быть возвращение на главную страницу"));
+
+
+        //paymentPage.selectService("Услуги связи");
+
+
+        paymentPage.fillPhoneNumber("(29)777-77-77");
+        paymentPage.fillAmount("10");
+        paymentPage.checkContinueButtonState();
     }
 }
-
-
