@@ -7,7 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.MtsOnlinePaymentPage;
 
-
 public class BaseTest {
     protected WebDriver driver;
     protected MtsOnlinePaymentPage paymentPage;

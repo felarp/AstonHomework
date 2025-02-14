@@ -7,7 +7,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class MtsOnlinePaymentPage extends BasePage {
 
     private final By BLOCK_TITLE = By.xpath("//h2[contains(text(),'Онлайн пополнение')]");
@@ -42,7 +41,6 @@ public class MtsOnlinePaymentPage extends BasePage {
     @Step("Клик по ссылке 'Подробнее о сервисе' и проверка открытия деталей")
     public void clickAndVerifyServiceDetails() {
         wait.until(ExpectedConditions.elementToBeClickable(DETAILS_LINK)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(DETAILS_LINK));
         driver.navigate().back();
     }
 
