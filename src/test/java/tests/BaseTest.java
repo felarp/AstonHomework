@@ -1,9 +1,10 @@
 package tests;
 
-import configuration.WebDriverUtil;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import pages.MtsOnlinePaymentPage;
 
 
@@ -13,7 +14,9 @@ public class BaseTest {
 
     @BeforeEach
     void setUp() {
-        driver = WebDriverUtil.createDriver();
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
         driver.get("https://mts.by");
         paymentPage = new MtsOnlinePaymentPage(driver);
         paymentPage.acceptCookiesIfPresent();
@@ -21,8 +24,6 @@ public class BaseTest {
 
     @AfterEach
     void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        if (driver != null) driver.quit();
     }
 }
