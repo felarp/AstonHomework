@@ -16,7 +16,7 @@ public class MtsOnlinePaymentPage extends BasePage {
     private final By PHONE_INPUT = By.id("connection-phone");
     private final By AMOUNT_INPUT = By.cssSelector("input.total_rub");
     private final By CONTINUE_BUTTON = By.xpath("//button[text()='Продолжить']");
-    private final By MODAL_WINDOW = By.cssSelector(".payment-page__container");
+    private final By MODAL_WINDOW = By.xpath("//div[@class='app-wrapper__content']");
 
     public MtsOnlinePaymentPage(WebDriver driver) {
         super(driver);
@@ -66,8 +66,11 @@ public class MtsOnlinePaymentPage extends BasePage {
     public void clickContinueAndWaitForModal() {
         WebElement continueButton = wait.until(ExpectedConditions.elementToBeClickable(CONTINUE_BUTTON));
         continueButton.click();
+        By IFRAME_LOCATOR = By.tagName("iframe");
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(IFRAME_LOCATOR));
         WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(MODAL_WINDOW));
         assertThat(modal.isDisplayed()).as("Модальное окно должно появиться").isTrue();
+        driver.switchTo().defaultContent();
     }
 }
 
