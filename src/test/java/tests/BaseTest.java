@@ -9,6 +9,7 @@ import pages.MtsOnlinePaymentPage;
 public class BaseTest {
     protected WebDriver driver;
     protected MtsOnlinePaymentPage paymentPage;
+
     @BeforeEach
     void setUp() {
         driver = WebDriverUtil.getDriver();
@@ -16,6 +17,7 @@ public class BaseTest {
         paymentPage = new MtsOnlinePaymentPage(driver);
         paymentPage.acceptCookiesIfPresent();
     }
+
     @AfterEach
     void tearDown() {
         WebDriverUtil.quitDriver();

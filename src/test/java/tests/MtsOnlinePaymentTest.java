@@ -1,32 +1,15 @@
 package tests;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 
 public class MtsOnlinePaymentTest extends BaseTest {
-    @Test
-    @DisplayName("Проверка отображения полей и их надписей для услуги 'Услуги связи'")
-    void shouldCheckFieldsForCommunicationService() {
-        paymentPage.checkFieldsForService("Услуги связи");
-    }
-
-    @Test
-    @DisplayName("Проверка отображения полей и их надписей для услуги 'Домашний интернет'")
-    void shouldCheckFieldsForHomeInternetService() {
-        paymentPage.checkFieldsForService("Домашний интернет");
-    }
-
-    @Test
-    @DisplayName("Проверка отображения полей и их надписей для услуги 'Рассрочка'")
-    void shouldCheckFieldsForInstalmentService() {
-        paymentPage.checkFieldsForService("Рассрочка");
-    }
-
-    @Test
-    @DisplayName("Проверка отображения полей и их надписей для услуги 'Задолженность'")
-    void shouldCheckFieldsForArrearsService() {
-        paymentPage.checkFieldsForService("Задолженность");
+    @ParameterizedTest
+    @ValueSource(strings = {"Услуги связи", "Домашний интернет", "Рассрочка", "Задолженность"})
+    @DisplayName("Проверка отображения полей и их надписей для услуги")
+    void shouldCheckFieldsForService(String serviceType) {
+        paymentPage.checkFieldsForService(serviceType);
     }
 }

@@ -17,9 +17,7 @@ public class BasePage {
     }
 
     public void acceptCookiesIfPresent() {
-        try {
-            WebElement button = wait.until(ExpectedConditions.presenceOfElementLocated(COOKIE_ACCEPT_BUTTON));
-            if (button.isDisplayed()) button.click();
-        } catch (TimeoutException | NoSuchElementException ignored)  {}
+        WebElement button = wait.until(ExpectedConditions.visibilityOfElementLocated(COOKIE_ACCEPT_BUTTON));
+        button.click();
     }
 }

@@ -3,7 +3,7 @@ package locators;
 import org.openqa.selenium.By;
 import java.util.Map;
 
-public class MtsOnlinePaymentLocators {
+public class MtsPaymentLocators {
 
     public static final Map<String, By> SERVICE_FIELDS = Map.of(
             "Услуги связи", By.id("connection-phone"),
@@ -26,12 +26,4 @@ public class MtsOnlinePaymentLocators {
             "Задолженность", By.id("arrears-sum")
     );
 
-    public static final Map<String, String> EXPECTED_PLACEHOLDERS = Map.of(
-            "Услуги связи", "Номер телефона",
-            "Домашний интернет", "Номер абонента",
-            "Рассрочка", "Номер счета на 44",
-            "Задолженность", "Номер счета на 2073",
-            "Email", "E-mail для отправки чека",
-            "Сумма", "Сумма"
-    );
 }
