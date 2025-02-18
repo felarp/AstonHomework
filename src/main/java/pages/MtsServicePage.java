@@ -14,7 +14,7 @@ public class MtsServicePage extends BasePage {
         super(driver);
     }
 
-    @Step("Заполнение полей и нажание на кнопку 'Продолжить'")
+    @Step("Заполнение полей и нажатие на кнопку 'Продолжить'")
     public MtsServicePage fillFieldsAndSubmit(String phoneNumber, String amount) {
         fillField(MtsPaymentLocators.PHONE_INPUT, phoneNumber);
         fillField(MtsPaymentLocators.AMOUNT_INPUT, amount);
