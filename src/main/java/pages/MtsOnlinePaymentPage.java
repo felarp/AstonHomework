@@ -2,13 +2,12 @@ package pages;
 
 import io.qameta.allure.Step;
 import locators.MtsPaymentLocators;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import testdata.MtsPaymentTestData;
-
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MtsOnlinePaymentPage extends BasePage{
     public MtsOnlinePaymentPage(WebDriver driver) {
@@ -37,10 +36,15 @@ public class MtsOnlinePaymentPage extends BasePage{
     }
 
     private void assertField(By locator, String expectedPlaceholder) {
-        Assertions.assertThat(wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getAttribute("placeholder"))
+        assertThat(wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getAttribute("placeholder"))
                 .as("Некорректный placeholder для " + locator)
                 .isEqualTo(expectedPlaceholder);
     }
+
+
+
+
+
 }
 
 
