@@ -31,21 +31,17 @@ public class MtsServicePage extends BasePage {
     public MtsServicePage verifyPaymentDetails() {
         switchToIframe();
 
-        String expectedAmount = "Оплатить " + String.format("%.2f", Double.parseDouble(MtsPaymentTestData.AMOUNT)) + " BYN";
-        String actualAmount = wait.until(visibilityOfElementLocated(MtsPaymentLocators.PAY_BUTTON)).getText();
-        expectedAmount = expectedAmount.replace(",", ".");
-        actualAmount = actualAmount.replace(",", ".");
+        String expectedAmount = String.format("Оплатить %.2f BYN", Double.parseDouble(MtsPaymentTestData.AMOUNT)).replace(",", ".");
+        String actualAmount = wait.until(visibilityOfElementLocated(MtsPaymentLocators.PAY_BUTTON)).getText().replace(",", ".");
 
-        assertThat(actualAmount)
-                .as("Кнопка оплаты должна отображать правильную сумму")
-                .isEqualTo(expectedAmount);
-
+        assertThat(actualAmount).as("Кнопка оплаты должна отображать правильную сумму").isEqualTo(expectedAmount);
         verifyElement(MtsPaymentLocators.PHONE_MODAL, "text", MtsPaymentTestData.PHONE_NUMBER, "Номер телефона в модальном окне");
         verifyInputPlaceholders();
         verifyElementsPresence(MtsPaymentLocators.PAYMENT_ICONS, "Иконки платёжных систем");
 
         return this;
     }
+
 
     @Step("Проверка текстовых значений в полях ввода")
     private void verifyInputPlaceholders() {
