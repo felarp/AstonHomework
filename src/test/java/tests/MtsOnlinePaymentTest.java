@@ -26,9 +26,7 @@ public class MtsOnlinePaymentTest extends BaseTest {
     @DisplayName("Проверка заполнения телефона, суммы и появления модального окна")
     public void testMtsServicePage(String phoneNumber, String amount) {
         new MtsServicePage(driver)
-                .fillPhoneNumber(phoneNumber)
-                .fillAmount(amount)
-                .clickContinueAndWaitForModal()
+                .fillFieldsAndSubmit(phoneNumber,amount)
                 .verifyPaymentDetails();
 
 

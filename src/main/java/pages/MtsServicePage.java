@@ -5,30 +5,26 @@ import locators.MtsPaymentLocators;
 import org.openqa.selenium.*;
 import testdata.MtsPaymentTestData;
 
+import static locators.MtsPaymentLocators.IFRAME_LOCATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
-public class MtsServicePage extends BasePage{
+public class MtsServicePage extends BasePage {
     public MtsServicePage(WebDriver driver) {
         super(driver);
     }
 
-    @Step("Заполнение номера телефона: {phoneNumber}")
-    public MtsServicePage fillPhoneNumber(String phoneNumber) {
+    @Step("Заполнение полей и нажание на кнопку 'Продолжить'")
+    public MtsServicePage fillFieldsAndSubmit(String phoneNumber, String amount) {
         fillField(MtsPaymentLocators.PHONE_INPUT, phoneNumber);
-        return this;
-    }
-
-    @Step("Заполнение суммы: {amount}")
-    public MtsServicePage fillAmount(String amount) {
         fillField(MtsPaymentLocators.AMOUNT_INPUT, amount);
+        clickAndWaitForModal(MtsPaymentLocators.CONTINUE_BUTTON);
         return this;
     }
 
-    @Step("Нажатие на кнопку 'Продолжить' и ожидание появления модального окна")
-    public MtsServicePage clickContinueAndWaitForModal() {
-        wait.until(elementToBeClickable(MtsPaymentLocators.CONTINUE_BUTTON)).click();
-        return this;
+    @Step("Нажатие на кнопку и ожидание появления модального окна")
+    private void clickAndWaitForModal(By locator) {
+        wait.until(elementToBeClickable(locator)).click();
     }
 
     @Step("Проверка деталей платежной страницы")
@@ -37,7 +33,6 @@ public class MtsServicePage extends BasePage{
 
         String expectedAmount = "Оплатить " + String.format("%.2f", Double.parseDouble(MtsPaymentTestData.AMOUNT)) + " BYN";
         String actualAmount = wait.until(visibilityOfElementLocated(MtsPaymentLocators.PAY_BUTTON)).getText();
-
         expectedAmount = expectedAmount.replace(",", ".");
         actualAmount = actualAmount.replace(",", ".");
 
@@ -46,13 +41,18 @@ public class MtsServicePage extends BasePage{
                 .isEqualTo(expectedAmount);
 
         verifyElement(MtsPaymentLocators.PHONE_MODAL, "text", MtsPaymentTestData.PHONE_NUMBER, "Номер телефона в модальном окне");
+        verifyInputPlaceholders();
+        verifyElementsPresence(MtsPaymentLocators.PAYMENT_ICONS, "Иконки платёжных систем");
+
+        return this;
+    }
+
+    @Step("Проверка текстовых значений в полях ввода")
+    private void verifyInputPlaceholders() {
         getInputValue(MtsPaymentLocators.CARD_NUMBER_INPUT, "placeholder", MtsPaymentTestData.CARD_NUMBER_PLACEHOLDER);
         getInputValue(MtsPaymentLocators.EXPIRY_DATE_INPUT, "placeholder", MtsPaymentTestData.EXPIRY_DATE_PLACEHOLDER);
         getInputValue(MtsPaymentLocators.CVC_INPUT, "placeholder", MtsPaymentTestData.CVC_PLACEHOLDER);
         getInputValue(MtsPaymentLocators.CARDHOLDER_NAME_INPUT, "placeholder", MtsPaymentTestData.CARDHOLDER_NAME_PLACEHOLDER);
-        verifyElementsPresence(MtsPaymentLocators.PAYMENT_ICONS, "Иконки платёжных систем");
-
-        return this;
     }
 
     @Step("Заполнение поля: {value}")
@@ -67,7 +67,6 @@ public class MtsServicePage extends BasePage{
 
     @Step("Переключение в iframe")
     private void switchToIframe() {
-        By IFRAME_LOCATOR = By.xpath("//iframe[@allowpaymentrequest and @class='bepaid-iframe']");
         wait.until(frameToBeAvailableAndSwitchToIt(IFRAME_LOCATOR));
     }
 
