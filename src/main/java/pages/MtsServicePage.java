@@ -18,22 +18,15 @@ public class MtsServicePage extends BasePage {
     public MtsServicePage fillFieldsAndSubmit(String phoneNumber, String amount) {
         fillField(MtsPaymentLocators.PHONE_INPUT, phoneNumber);
         fillField(MtsPaymentLocators.AMOUNT_INPUT, amount);
-        clickAndWaitForModal(MtsPaymentLocators.CONTINUE_BUTTON);
+        wait.until(elementToBeClickable(MtsPaymentLocators.CONTINUE_BUTTON)).click();
         return this;
-    }
-
-    @Step("Нажатие на кнопку и ожидание появления модального окна")
-    private void clickAndWaitForModal(By locator) {
-        wait.until(elementToBeClickable(locator)).click();
     }
 
     @Step("Проверка деталей платежной страницы")
     public MtsServicePage verifyPaymentDetails() {
         switchToIframe();
-
         String expectedAmount = String.format("Оплатить %.2f BYN", Double.parseDouble(MtsPaymentTestData.AMOUNT)).replace(",", ".");
         String actualAmount = wait.until(visibilityOfElementLocated(MtsPaymentLocators.PAY_BUTTON)).getText().replace(",", ".");
-
         assertThat(actualAmount).as("Кнопка оплаты должна отображать правильную сумму").isEqualTo(expectedAmount);
         verifyElement(MtsPaymentLocators.PHONE_MODAL, "text", MtsPaymentTestData.PHONE_NUMBER, "Номер телефона в модальном окне");
         verifyInputPlaceholders();
@@ -41,7 +34,6 @@ public class MtsServicePage extends BasePage {
 
         return this;
     }
-
 
     @Step("Проверка текстовых значений в полях ввода")
     private void verifyInputPlaceholders() {
