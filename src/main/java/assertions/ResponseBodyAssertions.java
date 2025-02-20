@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ResponseBodyAssertions {
     private final Response response;
-
     public ResponseBodyAssertions(Response response) {
         this.response = response;
     }

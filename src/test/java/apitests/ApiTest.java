@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class ApiTest extends BaseApiTest {
     @Test
     public void testGetRequest() {

@@ -10,7 +10,6 @@ public class HttpAssertions {
                 .as("Проверка кода ответа")
                 .isEqualTo(expectedStatusCode);
     }
-
     public static ResponseBodyAssertions assertResponseBody(Response response) {
         System.out.println("Тело ответа: " + response.getBody().asPrettyString());
         return new ResponseBodyAssertions(response);
