@@ -30,7 +30,7 @@ public class ApiProvider {
     public Response postUrlEncoded(String endpoint, Map<String, String> formParams) {
         return given()
                 .accept(ContentType.JSON)
-                .contentType("application/json")
+                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .formParams(formParams)
                 .log().all()
                 .when()
