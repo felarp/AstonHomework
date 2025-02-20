@@ -30,7 +30,7 @@ public class ApiProvider {
     public Response postUrlEncoded(String endpoint, Map<String, String> formParams) {
         return given()
                 .accept(ContentType.JSON)
-                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .contentType("application/json")
                 .formParams(formParams)
                 .log().all()
                 .when()
@@ -42,7 +42,7 @@ public class ApiProvider {
     public Response put(String endpoint, String body) {
         return given()
                 .accept(ContentType.JSON)
-                .contentType("text/plain")
+                .contentType("application/json")
                 .body(body)
                 .when()
                 .put(endpoint)
@@ -53,7 +53,7 @@ public class ApiProvider {
     public Response patch(String endpoint, String body) {
         return given()
                 .accept(ContentType.JSON)
-                .contentType("text/plain")
+                .contentType("application/json")
                 .body(body)
                 .when()
                 .patch(endpoint)
@@ -64,7 +64,7 @@ public class ApiProvider {
     public Response delete(String endpoint, String requestBody) {
         return given()
                 .accept(ContentType.JSON)
-                .contentType(ContentType.JSON)
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .delete(endpoint)
