@@ -3,6 +3,8 @@ package providers;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 
 public class ApiProvider {
@@ -36,12 +38,12 @@ public class ApiProvider {
                 .log().all()
                 .extract().response();
     }
-    public Response post(String endpoint, Object body, String token) {
+    public Response postUrlEncoded(String endpoint, Map<String, String> formParams) {
         return given()
                 .accept(ContentType.JSON)
-                .contentType("application/json")
-                .header("Authorization", "Bearer " + token)
-                .body(body)
+                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParams(formParams)
+                .log().all()
                 .when()
                 .post(endpoint)
                 .then()
