@@ -10,7 +10,6 @@ public class ResponseBodyAssertions {
     public ResponseBodyAssertions(Response response) {
         this.response = response;
     }
-
     public ResponseBodyAssertions assertField(String fieldPath, String expectedValue) {
         assertThat(response.jsonPath().getString(fieldPath))
                 .as("Проверка значения " + fieldPath)

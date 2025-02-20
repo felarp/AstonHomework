@@ -17,16 +17,6 @@ public class ApiProvider {
                 .log().all()
                 .extract().response();
     }
-    public Response get(String endpoint, String token) {
-        return given()
-                .accept(ContentType.JSON)
-                .header("Authorization", "Bearer " + token)
-                .when()
-                .get(endpoint)
-                .then()
-                .log().all()
-                .extract().response();
-    }
     public Response post(String endpoint, Object body) {
         return given()
                 .accept(ContentType.JSON)
@@ -50,9 +40,21 @@ public class ApiProvider {
                 .log().all()
                 .extract().response();
     }
-    public Response patch(String endpoint, Object body) {
+    public Response put(String endpoint, String body) {
         return given()
                 .accept(ContentType.JSON)
+                .contentType("text/plain")
+                .body(body)
+                .when()
+                .put(endpoint)
+                .then()
+                .log().all()
+                .extract().response();
+    }
+    public Response patch(String endpoint, String body) {
+        return given()
+                .accept(ContentType.JSON)
+                .contentType("text/plain")
                 .body(body)
                 .when()
                 .patch(endpoint)
@@ -60,14 +62,15 @@ public class ApiProvider {
                 .log().all()
                 .extract().response();
     }
-    public Response delete(String endpoint) {
+    public Response delete(String endpoint, String requestBody) {
         return given()
                 .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .body(requestBody)
                 .when()
                 .delete(endpoint)
                 .then()
                 .log().all()
                 .extract().response();
     }
-
 }
