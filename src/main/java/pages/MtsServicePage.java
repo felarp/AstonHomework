@@ -1,87 +1,87 @@
 package pages;
 
 import io.qameta.allure.Step;
-import locators.MtsPaymentLocators;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import testdata.MtsPaymentTestData;
-
-import static locators.MtsPaymentLocators.IFRAME_LOCATOR;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class MtsServicePage extends BasePage {
+
+    @FindBy(id = "connection-phone") WebElement phoneInput;
+    @FindBy(css = "input.total_rub") WebElement amountInput;
+    @FindBy(xpath = "//div[@class='pay__form']//button[text()='Продолжить']") WebElement continueButton;
+    @FindBy(xpath = "//button[contains(@class, 'colored')]") WebElement payButton;
+    @FindBy(xpath = "//span[contains(text(),'Оплата')]") WebElement phoneModal;
+    @FindBy(xpath = "//div[@class='icons-container ng-tns-c46-1']") WebElement paymentIcons;
+    @FindBy(xpath = "//input[@formcontrolname='holder']") WebElement cardholderNameInput;
+    @FindBy(xpath = "//input[@formcontrolname='creditCard']") WebElement cardNumberInput;
+    @FindBy(xpath = "//input[@formcontrolname='expirationDate']") WebElement expiryDateInput;
+    @FindBy(xpath = "//input[@name='verification_value' and @formcontrolname='cvc']") WebElement cvcInput;
+    @FindBy(xpath = "//iframe[@allowpaymentrequest and @class='bepaid-iframe']") WebElement iframe;
+
     public MtsServicePage(WebDriver driver) {
         super(driver);
     }
-
-    @Step("Заполнение полей и нажатие на кнопку 'Продолжить'")
+    @Step("Заполнение полей телефона: {phoneNumber} и суммы: {amount}, затем нажатие на кнопку 'Продолжить'")
     public MtsServicePage fillFieldsAndSubmit(String phoneNumber, String amount) {
-        fillField(MtsPaymentLocators.PHONE_INPUT, phoneNumber);
-        fillField(MtsPaymentLocators.AMOUNT_INPUT, amount);
-        wait.until(elementToBeClickable(MtsPaymentLocators.CONTINUE_BUTTON)).click();
+        fillField(phoneInput, phoneNumber);
+        fillField(amountInput, amount);
+        wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
         return this;
     }
-
-    @Step("Проверка деталей платежной страницы")
+    @Step("Проверка деталей платежа")
     public MtsServicePage verifyPaymentDetails() {
         switchToIframe();
         String expectedAmount = String.format("Оплатить %.2f BYN", Double.parseDouble(MtsPaymentTestData.AMOUNT)).replace(",", ".");
-        String actualAmount = wait.until(visibilityOfElementLocated(MtsPaymentLocators.PAY_BUTTON)).getText().replace(",", ".");
+        String actualAmount = wait.until(ExpectedConditions.visibilityOf(payButton)).getText().replace(",", ".");
         assertThat(actualAmount).as("Кнопка оплаты должна отображать правильную сумму").isEqualTo(expectedAmount);
-        verifyElement(MtsPaymentLocators.PHONE_MODAL, "text", MtsPaymentTestData.PHONE_NUMBER, "Номер телефона в модальном окне");
+        verifyElement(phoneModal, "text", MtsPaymentTestData.PHONE_NUMBER, "Номер телефона в модальном окне");
         verifyInputPlaceholders();
-        verifyElementsPresence(MtsPaymentLocators.PAYMENT_ICONS, "Иконки платёжных систем");
+        verifyElementsPresence(paymentIcons, "Иконки платёжных систем");
 
         return this;
     }
-
-    @Step("Проверка текстовых значений в полях ввода")
+    @Step("Проверка плейсхолдеров полей ввода")
     private void verifyInputPlaceholders() {
-        getInputValue(MtsPaymentLocators.CARD_NUMBER_INPUT, "placeholder", MtsPaymentTestData.CARD_NUMBER_PLACEHOLDER);
-        getInputValue(MtsPaymentLocators.EXPIRY_DATE_INPUT, "placeholder", MtsPaymentTestData.EXPIRY_DATE_PLACEHOLDER);
-        getInputValue(MtsPaymentLocators.CVC_INPUT, "placeholder", MtsPaymentTestData.CVC_PLACEHOLDER);
-        getInputValue(MtsPaymentLocators.CARDHOLDER_NAME_INPUT, "placeholder", MtsPaymentTestData.CARDHOLDER_NAME_PLACEHOLDER);
+        getInputValue(cardNumberInput, "placeholder", MtsPaymentTestData.CARD_NUMBER_PLACEHOLDER);
+        getInputValue(expiryDateInput, "placeholder", MtsPaymentTestData.EXPIRY_DATE_PLACEHOLDER);
+        getInputValue(cvcInput, "placeholder", MtsPaymentTestData.CVC_PLACEHOLDER);
+        getInputValue(cardholderNameInput, "placeholder", MtsPaymentTestData.CARDHOLDER_NAME_PLACEHOLDER);
     }
-
-    @Step("Заполнение поля: {value}")
-    private void fillField(By locator, String value) {
-        WebElement input = wait.until(presenceOfElementLocated(locator));
+    @Step("Заполнение поля {input} значением {value}")
+    private void fillField(WebElement input, String value) {
         input.clear();
         input.sendKeys(value);
         assertThat(input.getAttribute("value"))
                 .as("Поле должно содержать введенное значение")
                 .isEqualTo(value);
     }
-
-    @Step("Переключение в iframe")
+    @Step("Переключение в iframe для ввода данных платежа")
     private void switchToIframe() {
-        wait.until(frameToBeAvailableAndSwitchToIt(IFRAME_LOCATOR));
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iframe));
     }
-
-    @Step("Проверка элемента: {description}")
-    private void verifyElement(By locator, String attribute, String expectedValue, String description) {
-        WebElement element = wait.until(visibilityOfElementLocated(locator));
+    @Step("Проверка элемента {element}")
+    private void verifyElement(WebElement element, String attribute, String expectedValue, String description) {
         String actualValue = "text".equals(attribute) ? element.getText() : element.getAttribute(attribute);
         assertThat(actualValue)
                 .as(description)
                 .contains(expectedValue);
     }
-
-    @Step("Считывание значения из поля: {description}")
-    public String getInputValue(By locator, String attribute, String description) {
-        WebElement input = wait.until(visibilityOfElementLocated(locator));
+    @Step("Получение значения из поля ввода {input}")
+    private String getInputValue(WebElement input, String attribute, String description) {
         String value = input.getAttribute(attribute);
         assertThat(value)
                 .as(description)
                 .isNotNull();
         return value;
     }
-
-    @Step("Проверка наличия элементов")
-    private void verifyElementsPresence(By locator, String description) {
-        assertThat(wait.until(presenceOfAllElementsLocatedBy(locator)))
+    @Step("Проверка наличия элемента {element}")
+    private void verifyElementsPresence(WebElement element, String description) {
+        assertThat(element.isDisplayed())
                 .as(description)
-                .isNotEmpty();
+                .isTrue();
     }
 }
 

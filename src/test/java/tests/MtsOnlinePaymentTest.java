@@ -6,7 +6,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import pages.MtsServicePage;
 
-
 public class MtsOnlinePaymentTest extends BaseTest {
     @ParameterizedTest
     @ValueSource(strings = {"Услуги связи", "Домашний интернет", "Рассрочка", "Задолженность"})
@@ -26,4 +25,3 @@ public class MtsOnlinePaymentTest extends BaseTest {
                 .verifyPaymentDetails();
     }
 }
-
