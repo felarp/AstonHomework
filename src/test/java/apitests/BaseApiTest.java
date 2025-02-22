@@ -6,7 +6,6 @@ import providers.ApiProvider;
 
 public class BaseApiTest {
     protected static ApiProvider apiProvider = new ApiProvider();
-
     @BeforeAll
     public static void setUp() {
         RestAssured.baseURI = "https://postman-echo.com";
